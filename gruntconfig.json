@@ -1,0 +1,22 @@
+{
+	"paths" : {
+		"build_path" : "build",
+		"build_exclusions": [
+			"!node_modules",
+			"!logs",
+			"!dats",
+			"!test",
+			"*",
+			"!package.json",
+			"!config.codekit",
+			"!README.md",
+			"!Gruntfile.js",
+			"!grunt.config",
+			"js/**",
+			"css/**",
+			"!php/**",
+			"!sftpCache.json",
+			"!gruntconfig.json"
+		]
+	}
+}
