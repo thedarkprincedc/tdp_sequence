@@ -1,14 +1,13 @@
-define(function (require) {
+/*define(function (require) {
 	var $ = require('jquery'),
 		_ = require('underscore'),
 		backbone = require('backbone'),
 		radio = require('backbone.radio'),
 		Mn = require('backbone.marionette');
-		//require('raphael');
-		
+*/
+define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette"], 
+	function($, _, backbone, radio, Mn){
 
-	//
-	//$(document).foundation();
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
 	});
@@ -64,7 +63,7 @@ define(function (require) {
 								</div> \
 							</div>"),
 		onRender: function(){
-			console.log("Egergtrgrtgrtgrtg");
+
 		}
 	});
 	const App = Mn.Application.extend({

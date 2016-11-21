@@ -1,7 +1,10 @@
 ({
 	baseUrl: ".",
 	mainConfigFile: "app.js",
-	name: "js/main",
+	name: "node_modules/almond/almond",
+	include: ['js/main'],
+    insertRequire: ['js/main'],
 	out: "js/main-build.js",
-	optimize: "none"
+	optimize: "none",
+	wrap: true
 })

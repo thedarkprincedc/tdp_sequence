@@ -5,11 +5,15 @@
   "manifest_version": 2,
   "app": {
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["background.js", "js/vendor/lodash.js","js/vendor/raphael.js",
+        "js/vendor/sequence.js", "js/main-build.js"]
     }
   },
   "icons": { "128": "icon_128.png" },
   "permissions": [
     "http://*/"
-  ]
+  ],
+  "sandbox": {
+     "pages": ["window.html"]
+  }
 }
