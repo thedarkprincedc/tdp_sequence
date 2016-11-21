@@ -2,11 +2,13 @@ define(function (require) {
 	var $ = require('jquery'),
 		_ = require('underscore'),
 		backbone = require('backbone'),
-		//radio = require('backbone.radio')
-		Mn = require('backbone.marionette')
-		diagram = require("sequence");
+		radio = require('backbone.radio'),
+		Mn = require('backbone.marionette');
+		//require('raphael');
+		
 
 	//
+	//$(document).foundation();
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
 	});
@@ -34,50 +36,20 @@ define(function (require) {
 			var seqItem = text;
 			$('#diagram').html('');
 			this.seqArr = [];
-			if(regExp.exec(text) !== null){
-				while (seqItem = regExp.exec(text) !== null) {
-					seqItem = text.slice(last, regExp.lastIndex);
-					this.seqArr.push({
-						name : "Diagram_" + count,
-						desc : seqItem.replace(/(```sequence|```)/g,"")
-					});
-					last = regExp.lastIndex;
-					$('#diagram').append("<div></div>");
-					diagram = Diagram.parse(seqArr[count].desc);
-					diagram.drawSVG($('#diagram > div:last')[0], {theme: 'simple'});
-					$('#diagram > div:last').prepend("<h3>"+seqArr[count].name+"</h3>");
-				    ++count;
-				}
-			}
-			/*
+			
 			while (seqItem = regExp.exec(text) !== null) {
 				seqItem = text.slice(last, regExp.lastIndex);
-				seqArr.push({
+				this.seqArr.push({
 					name : "Diagram_" + count,
 					desc : seqItem.replace(/(```sequence|```)/g,"")
 				});
-				
 				last = regExp.lastIndex;
 				$('#diagram').append("<div></div>");
-				diagram = Diagram.parse(seqArr[count].desc);
+				var diagram = Diagram.parse(this.seqArr[count].desc);
 				diagram.drawSVG($('#diagram > div:last')[0], {theme: 'simple'});
-				$('#diagram > div:last').prepend("<h3>"+seqArr[count].name+"</h3>");
+				$('#diagram > div:last').prepend("<h3>"+this.seqArr[count].name+"</h3>");
 			    ++count;
 			}
-			if(seqArr.length>0){
-				$('.save').prop( "disabled", false );
-			}
-*/
-			//.replace(/^"(.*)"$/, '')
-			//var regExp = /```sequence[\s]{1,}[A-Za-z0-9\s\-\>\<\:\/\{\}]+```/ig;
-			/*
-			//var er = regExp.exec(text);
-			
-			
-			
-
-			
-			*/
 		},
 		template: _.template("<div class='expanded row'><br/> \
 	  							<div class='large-6 columns'> \
@@ -103,7 +75,4 @@ define(function (require) {
 	});
 	const myApp = new App();
 	myApp.start();
-
-	//
-
 });
