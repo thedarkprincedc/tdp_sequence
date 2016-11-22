@@ -32661,9 +32661,9 @@ return jQuery;
 
 //# sourceMappingURL=backbone.marionette.js.map
 ;
-define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],function($, Mn){
+define('js/views/saveDiagramDialogRegion',['jquery', "backbone.marionette"],function($, Mn){
 	return Mn.Region.extend({
-		el : "#modal",
+		el : "#model",
 		constructor : function(){
 			_.bindAll(this);
 			Mn.Region.prototype.constructor.apply(this, arguments);
@@ -32671,8 +32671,8 @@ define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],functi
 		},
 		getEl : function(selector){
 			var el = $(selector);
-			$el.on("hidden", this.close);
-			return $el;
+			//$el.on("hidden", this.close);
+			//return $el;
 		},
 		showModal : function(view){
 			view.on("close", this.hideModal, this);
@@ -32682,32 +32682,10 @@ define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],functi
 			this.$el.modal('hide');
 		}
 	});
-	/*return Mn.View.extend({
-		events : {
-			'click .saveDiagramDialog' : 'onClickSave'
-		},
-		template: _.template('<div id="modal1" class="modal bottom-sheet">\
-							    <div class="modal-content">\
-							      <h4>Modal Header</h4>\
-							      <p>A bunch of text</p>\
-							    </div>\
-							    <div class="modal-footer">\
-							      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>\
-							    </div>\
-							  </div>'),
-		onClickSave : function(){
-			console.log("saveDiagramDialogView->onClickSave()");
-
-		},
-		onRender: function() {
-   			console.log("yyyyyyyyyyyyyyyyyyy");
-   			 $('.modal1').modal();
-  		}
-	});*/
 });
 define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
-	"js/views/saveDiagramDialogView"], 
-	function($, _, backbone, radio, Mn, dialogView){
+	"js/views/saveDiagramDialogRegion"], 
+	function($, _, backbone, radio, Mn, dialogRegion){
 
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
@@ -32715,7 +32693,7 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 	const CodeView = Mn.View.extend({
 		regions : {
 			//modalRegion: '#modal'
-			modalRegion : dialogView
+			modalRegion : dialogRegion
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',

@@ -8,8 +8,8 @@ define(['jquery', "backbone.marionette"],function($, Mn){
 		},
 		getEl : function(selector){
 			var el = $(selector);
-			$el.on("hidden", this.close);
-			return $el;
+			//$el.on("hidden", this.close);
+			//return $el;
 		},
 		showModal : function(view){
 			view.on("close", this.hideModal, this);
