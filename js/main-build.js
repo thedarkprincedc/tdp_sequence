@@ -32661,26 +32661,66 @@ return jQuery;
 
 //# sourceMappingURL=backbone.marionette.js.map
 ;
-/*define(function (require) {
-	var $ = require('jquery'),
-		_ = require('underscore'),
-		backbone = require('backbone'),
-		radio = require('backbone.radio'),
-		Mn = require('backbone.marionette');
-*/
-define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette"], 
-	function($, _, backbone, radio, Mn){
+define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],function($, Mn){
+	return Mn.Region.extend({
+		el : "#modal",
+		constructor : function(){
+			_.bindAll(this);
+			Mn.Region.prototype.constructor.apply(this, arguments);
+			this.on("view:show", this.showModal, this);
+		},
+		getEl : function(selector){
+			var el = $(selector);
+			$el.on("hidden", this.close);
+			return $el;
+		},
+		showModal : function(view){
+			view.on("close", this.hideModal, this);
+			this.$el.modal('show');
+		},
+		hideModal : function(){
+			this.$el.modal('hide');
+		}
+	});
+	/*return Mn.View.extend({
+		events : {
+			'click .saveDiagramDialog' : 'onClickSave'
+		},
+		template: _.template('<div id="modal1" class="modal bottom-sheet">\
+							    <div class="modal-content">\
+							      <h4>Modal Header</h4>\
+							      <p>A bunch of text</p>\
+							    </div>\
+							    <div class="modal-footer">\
+							      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>\
+							    </div>\
+							  </div>'),
+		onClickSave : function(){
+			console.log("saveDiagramDialogView->onClickSave()");
+
+		},
+		onRender: function() {
+   			console.log("yyyyyyyyyyyyyyyyyyy");
+   			 $('.modal1').modal();
+  		}
+	});*/
+});
+define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
+	"js/views/saveDiagramDialogView"], 
+	function($, _, backbone, radio, Mn, dialogView){
 
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
 	});
 	const CodeView = Mn.View.extend({
-		region : {
-
+		regions : {
+			//modalRegion: '#modal'
+			modalRegion : dialogView
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',
-			'click #download' : 'onClickDownload'
+			'click .update' : 'onClickDownload',
+			'click .saveItem' : 'onClickSaveSingleItem'
 		},
 		seqItem : null,
 		onKeyUp : function(){
@@ -32688,7 +32728,14 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 			this.drawDiagram();
 		},
 		onClickDownload : function(){
-
+			console.log("onClickDownload()");
+			//this.triggerMethod('announce', 'I graduated!!!');
+			//this.showChildView('main-region', DialogV);
+			
+		},
+		onClickSaveSingleItem : function(){
+			console.log("njnuhnuhnrhunfhurnfhurnfr");
+			//this.showChildView("modalRegion", );
 		},
 		drawDiagram : function(){
 			var text = $('#editor').val();
@@ -32706,25 +32753,28 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 					desc : seqItem.replace(/(```sequence|```)/g,"")
 				});
 				last = regExp.lastIndex;
-				$('#diagram').append("<div></div>");
+				$('#diagram').append("<div class='card-panel hoverable saveItem' width='100px'></div>");
 				var diagram = Diagram.parse(this.seqArr[count].desc);
 				diagram.drawSVG($('#diagram > div:last')[0], {theme: 'simple'});
-				$('#diagram > div:last').prepend("<h3>"+this.seqArr[count].name+"</h3>");
+				$('#diagram > div:last').prepend("<h5>"+this.seqArr[count].name+"</h5>");
 			    ++count;
 			}
 		},
-		template: _.template("<div class='expanded row'><br/> \
-	  							<div class='large-6 columns'> \
-	  								<h3>Source:</h3> \
-	  									<textarea id='editor' rows='15'></textarea> \
-										<button class='button'>Update</button> \
+		template: _.template("<div class='row'><br/> \
+	  							<div class='col s3'> \
+	  								<div class='card-panel hoverable'> \
+	  								<h5>Source:</h5><hr> \
+	  									<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
+										<a class='waves-effect waves-light btn save_all'>Save All</a>\
+									</div> \
 								</div> \
-								<div class='large-6 columns'> \
+								<div class='col s9'> \
 	  								<div id='diagram'></div> \
 									<hr> \
 									<canvas id='canvas' style='display: none'></canvas> \
 								</div> \
-							</div>"),
+							</div>\
+							<div id='modal'></div>"),
 		onRender: function(){
 
 		}
