@@ -32663,29 +32663,38 @@ return jQuery;
 ;
 define('js/views/saveDiagramDialogRegion',['jquery', "backbone.marionette"],function($, Mn){
 	return Mn.Region.extend({
-		el : "#model",
-		constructor : function(){
-			_.bindAll(this);
-			Mn.Region.prototype.constructor.apply(this, arguments);
-			this.on("view:show", this.showModal, this);
-		},
-		getEl : function(selector){
-			var el = $(selector);
-			//$el.on("hidden", this.close);
-			//return $el;
-		},
-		showModal : function(view){
-			view.on("close", this.hideModal, this);
-			this.$el.modal('show');
-		},
-		hideModal : function(){
-			this.$el.modal('hide');
-		}
+	    constructor: function() {
+	        Mn.Region.prototype.constructor.apply(this, arguments);
+	        //this._ensureEl();
+	        this.$el.on('hidden', {region:this}, function(event) {
+	            event.data.region.close();
+	        });
+	    },
+	    onShow: function() {
+	        //this.$el.modal('show');
+	         $('#modal1').modal('open');
+	    },
+	    onClose: function() {
+	        this.$el.modal('hide');
+	    }
+	});
+});
+define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],function($, Mn){
+	return Mn.View.extend({
+		template: _.template('<div id="modal1" class="modal bottom-sheet">\
+							    <div class="modal-content">\
+							      <h4>Modal Header</h4>\
+							      <p>A bunch of text</p>\
+							    </div>\
+							    <div class="modal-footer">\
+							      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>\
+							    </div>\
+							  </div>')
 	});
 });
 define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
-	"js/views/saveDiagramDialogRegion"], 
-	function($, _, backbone, radio, Mn, dialogRegion){
+	"js/views/saveDiagramDialogRegion", "js/views/saveDiagramDialogView"], 
+	function($, _, backbone, radio, Mn, dialogRegion, dialogView){
 
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
@@ -32702,13 +32711,13 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 	const SequenceListView = Mn.View.extend({
 		template : _.template("<div id='diagram'></div>")
 	});
-
+var modal = new dialogRegion({el:'#modal'});
+var view = new dialogView();
 	const CodeView = Mn.View.extend({
 		regions : {
-			//modalRegion: '#modal'
 			leftRegion: "#leftRegion",
 			rightRegion: "#rightRegion",
-			modalRegion : dialogRegion
+			modal : "#modal"
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',
@@ -32729,7 +32738,7 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 
 		},
 		onClickSave : function(){
-			
+			modal.show(view);
 		},
 		onClickItem : function(){
 
@@ -32762,14 +32771,20 @@ define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbon
 	  								<div id='leftRegion'></div>\
 								</div> \
 								<div class='col s9'> \
-	  								 <div id='rightRegion'></div>\
+	  								<div id='rightRegion'></div>\
 									<canvas id='canvas' style='display: none'></canvas> \
 								</div> \
 							</div>\
 							<div id='modal'></div>"),
 		onRender: function(){
+
 			this.showChildView("leftRegion", new EditorView());
 			this.showChildView("rightRegion", new SequenceListView());
+			
+			
+			this.showChildView("modal", view);
+			
+
 		}
 	});
 	const App = Mn.Application.extend({

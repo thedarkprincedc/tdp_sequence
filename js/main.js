@@ -1,6 +1,6 @@
 define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
-	"js/views/saveDiagramDialogRegion"], 
-	function($, _, backbone, radio, Mn, dialogRegion){
+	"js/views/saveDiagramDialogRegion", "js/views/saveDiagramDialogView"], 
+	function($, _, backbone, radio, Mn, dialogRegion, dialogView){
 
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
@@ -17,13 +17,13 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
 	const SequenceListView = Mn.View.extend({
 		template : _.template("<div id='diagram'></div>")
 	});
-
+var modal = new dialogRegion({el:'#modal'});
+var view = new dialogView();
 	const CodeView = Mn.View.extend({
 		regions : {
-			//modalRegion: '#modal'
 			leftRegion: "#leftRegion",
 			rightRegion: "#rightRegion",
-			modalRegion : dialogRegion
+			modal : "#modal"
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',
@@ -44,7 +44,7 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
 
 		},
 		onClickSave : function(){
-			
+			modal.show(view);
 		},
 		onClickItem : function(){
 
@@ -77,14 +77,20 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
 	  								<div id='leftRegion'></div>\
 								</div> \
 								<div class='col s9'> \
-	  								 <div id='rightRegion'></div>\
+	  								<div id='rightRegion'></div>\
 									<canvas id='canvas' style='display: none'></canvas> \
 								</div> \
 							</div>\
 							<div id='modal'></div>"),
 		onRender: function(){
+
 			this.showChildView("leftRegion", new EditorView());
 			this.showChildView("rightRegion", new SequenceListView());
+			
+			
+			this.showChildView("modal", view);
+			
+
 		}
 	});
 	const App = Mn.Application.extend({
