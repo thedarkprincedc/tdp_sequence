@@ -5,30 +5,49 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
 	});
+	const EditorView = Mn.View.extend({
+		template: _.template("<div class='card-panel hoverable'> \
+								<h5>Source:</h5><hr> \
+									<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
+								<a class='waves-effect waves-light btn import_all'>Import</a>&nbsp\
+								<a class='waves-effect waves-light btn clear_all'>Clear</a>&nbsp\
+								<a class='waves-effect waves-light btn save_all'>Save</a>\
+							</div>")
+	});
+	const SequenceListView = Mn.View.extend({
+		template : _.template("<div id='diagram'></div>")
+	});
+
 	const CodeView = Mn.View.extend({
 		regions : {
 			//modalRegion: '#modal'
+			leftRegion: "#leftRegion",
+			rightRegion: "#rightRegion",
 			modalRegion : dialogRegion
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',
-			'click .update' : 'onClickDownload',
-			'click .saveItem' : 'onClickSaveSingleItem'
+			'click .import_all' : 'onClickImport',
+			'click .clear_all' : 'onClickClear',
+			'click .save_all' : 'onClickSave',
+			'click .item_all' : 'onClickAll'
 		},
 		seqItem : null,
 		onKeyUp : function(){
 			console.log("Drawing Diagram_");
 			this.drawDiagram();
 		},
-		onClickDownload : function(){
-			console.log("onClickDownload()");
-			//this.triggerMethod('announce', 'I graduated!!!');
-			//this.showChildView('main-region', DialogV);
+		onClickImport : function(){
+
+		},
+		onClickClear : function(){
+
+		},
+		onClickSave : function(){
 			
 		},
-		onClickSaveSingleItem : function(){
-			console.log("njnuhnuhnrhunfhurnfhurnfr");
-			//this.showChildView("modalRegion", );
+		onClickItem : function(){
+
 		},
 		drawDiagram : function(){
 			var text = $('#editor').val();
@@ -46,7 +65,7 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
 					desc : seqItem.replace(/(```sequence|```)/g,"")
 				});
 				last = regExp.lastIndex;
-				$('#diagram').append("<div class='card-panel hoverable saveItem' width='100px'></div>");
+				$('#diagram').append("<div class='card-panel hoverable item_all' width='100px'></div>");
 				var diagram = Diagram.parse(this.seqArr[count].desc);
 				diagram.drawSVG($('#diagram > div:last')[0], {theme: 'simple'});
 				$('#diagram > div:last').prepend("<h5>"+this.seqArr[count].name+"</h5>");
@@ -55,21 +74,17 @@ define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionet
 		},
 		template: _.template("<div class='row'><br/> \
 	  							<div class='col s3'> \
-	  								<div class='card-panel hoverable'> \
-	  								<h5>Source:</h5><hr> \
-	  									<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
-										<a class='waves-effect waves-light btn save_all'>Save All</a>\
-									</div> \
+	  								<div id='leftRegion'></div>\
 								</div> \
 								<div class='col s9'> \
-	  								<div id='diagram'></div> \
-									<hr> \
+	  								 <div id='rightRegion'></div>\
 									<canvas id='canvas' style='display: none'></canvas> \
 								</div> \
 							</div>\
 							<div id='modal'></div>"),
 		onRender: function(){
-
+			this.showChildView("leftRegion", new EditorView());
+			this.showChildView("rightRegion", new SequenceListView());
 		}
 	});
 	const App = Mn.Application.extend({
