@@ -7,7 +7,9 @@ require.config({
 		"backbone.radio" : "js/vendor/backbone.marionette/backbone.radio",
 		"backbone.marionette" : "js/vendor/backbone.marionette/backbone.marionette",
 		"what-input" : "js/vendor/what-input",
-		"foundation" : "js/vendor/foundation"
+		"foundation" : "js/vendor/foundation",
+		"App" : "js/app",
+		"diagramCollection" : "js/models/diagramCollection"
 	}, 
 	shim: {
 		backbone : {

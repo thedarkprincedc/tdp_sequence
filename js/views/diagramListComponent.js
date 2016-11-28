@@ -1,19 +1,13 @@
-define(['jquery', "backbone", "backbone.marionette", "js/views/diagramView"],function($, Bb, Mn, diagramView){
+define(['jquery', "backbone", "backbone.marionette", "js/views/diagramView",
+	"diagramCollection"],function($, Bb, Mn, diagramView, diagramCollection){
 	return Mn.CollectionView.extend({
 		childView : diagramView,
-		collection : new Bb.Collection([
-			{	_id : 01232, 
-				name : "kmekdmkekm",
-				diagramText: "```sequence\ntest->tttttt:fffff```"
-			},
-			{	_id : 121, 
-				name : "kmekdddddddddddmkekm",
-				diagramText: "```sequence\ntest->tttttt:fffff```"
-			}
-		]),
+		collection : diagramCollection,
 		initialize: function(options){
     		//this.listenTo(this.collection, "sort", this.renderCollection);
-    		
+    		/*this.listenTo("editor:update", function(){
+    			console.log("fffffffff");
+    		});*/
   		}
   	
 	});
