@@ -32692,27 +32692,40 @@ define('js/views/saveDiagramDialogView',['jquery', "backbone.marionette"],functi
 							  </div>')
 	});
 });
+define('js/views/editorComponent.js',['jquery', "backbone.marionette"],function($, Mn){
+	return Mn.View.extend({
+			template: _.template("<div class='card-panel hoverable'> \
+						<h5>Source:</h5><hr> \
+							<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
+						<a class='waves-effect waves-light btn import_all'>Import</a>&nbsp\
+						<a class='waves-effect waves-light btn clear_all'>Clear</a>&nbsp\
+						<a class='waves-effect waves-light btn save_all'>Save</a>\
+					</div>")
+	});
+});
+
+define('js/views/diagramListComponent.js',['jquery', "backbone.marionette"],function($, Mn){
+	return Mn.CollectionView.extend({
+		
+	});
+});
 define('js/main',["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
-	"js/views/saveDiagramDialogRegion", "js/views/saveDiagramDialogView"], 
-	function($, _, backbone, radio, Mn, dialogRegion, dialogView){
+	"js/views/saveDiagramDialogRegion", 
+	"js/views/saveDiagramDialogView",
+	"js/views/editorComponent.js",
+	"js/views/diagramListComponent.js"], 
+function($, _, backbone, radio, Mn, 
+	dialogRegion, 
+	dialogView, 
+	editorComponent,
+	diagramListComponent){
 
  	const RootView = Mn.View.extend({
 		template: _.template('<h1>Marionette says hello!</h1>')
 	});
-	const EditorView = Mn.View.extend({
-		template: _.template("<div class='card-panel hoverable'> \
-								<h5>Source:</h5><hr> \
-									<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
-								<a class='waves-effect waves-light btn import_all'>Import</a>&nbsp\
-								<a class='waves-effect waves-light btn clear_all'>Clear</a>&nbsp\
-								<a class='waves-effect waves-light btn save_all'>Save</a>\
-							</div>")
-	});
-	const SequenceListView = Mn.View.extend({
-		template : _.template("<div id='diagram'></div>")
-	});
-var modal = new dialogRegion({el:'#modal'});
-var view = new dialogView();
+	var modal = new dialogRegion({el:'#modal'});
+	var view = new dialogView();
+
 	const CodeView = Mn.View.extend({
 		regions : {
 			leftRegion: "#leftRegion",
@@ -32778,8 +32791,8 @@ var view = new dialogView();
 							<div id='modal'></div>"),
 		onRender: function(){
 
-			this.showChildView("leftRegion", new EditorView());
-			this.showChildView("rightRegion", new SequenceListView());
+			this.showChildView("leftRegion", editorComponent);
+			this.showChildView("rightRegion", diagramListComponent);
 			
 			
 			this.showChildView("modal", view);
@@ -32795,6 +32808,7 @@ var view = new dialogView();
 	});
 	const myApp = new App();
 	myApp.start();
+
 });
 
 require(["js/main"]);

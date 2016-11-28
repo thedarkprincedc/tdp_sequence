@@ -1,29 +1,18 @@
 define(["jquery", "underscore", "backbone", "backbone.radio", "backbone.marionette", 
-	"js/views/saveDiagramDialogRegion", "js/views/saveDiagramDialogView"], 
-	function($, _, backbone, radio, Mn, dialogRegion, dialogView){
+	"js/views/saveDiagramDialogRegion", 
+	"js/views/saveDiagramDialogView",
+	"js/views/editorComponent.js",
+	"js/views/diagramListComponent.js"], 
+function($, _, backbone, radio, Mn, 
+	dialogRegion, 
+	dialogView, 
+	editorComponent,
+	diagramListComponent){
 
- 	const RootView = Mn.View.extend({
-		template: _.template('<h1>Marionette says hello!</h1>')
-	});
-	const EditorView = Mn.View.extend({
-		template: _.template("<div class='card-panel hoverable'> \
-								<h5>Source:</h5><hr> \
-									<textarea id='editor' height='600px' class='materialize-textarea'></textarea> \
-								<a class='waves-effect waves-light btn import_all'>Import</a>&nbsp\
-								<a class='waves-effect waves-light btn clear_all'>Clear</a>&nbsp\
-								<a class='waves-effect waves-light btn save_all'>Save</a>\
-							</div>")
-	});
-	const SequenceListView = Mn.View.extend({
-		template : _.template("<div id='diagram'></div>")
-	});
-var modal = new dialogRegion({el:'#modal'});
-var view = new dialogView();
 	const CodeView = Mn.View.extend({
 		regions : {
 			leftRegion: "#leftRegion",
-			rightRegion: "#rightRegion",
-			modal : "#modal"
+			rightRegion: "#rightRegion"
 		},
 		events : {
 			'keyup #editor' : 'onKeyUp',
@@ -32,7 +21,6 @@ var view = new dialogView();
 			'click .save_all' : 'onClickSave',
 			'click .item_all' : 'onClickAll'
 		},
-		seqItem : null,
 		onKeyUp : function(){
 			console.log("Drawing Diagram_");
 			this.drawDiagram();
@@ -80,17 +68,11 @@ var view = new dialogView();
 	  								<div id='rightRegion'></div>\
 									<canvas id='canvas' style='display: none'></canvas> \
 								</div> \
-							</div>\
-							<div id='modal'></div>"),
+							</div>"),
 		onRender: function(){
-
-			this.showChildView("leftRegion", new EditorView());
-			this.showChildView("rightRegion", new SequenceListView());
-			
-			
-			this.showChildView("modal", view);
-			
-
+			this.showChildView("leftRegion", new editorComponent());
+			this.showChildView("rightRegion", new diagramListComponent());		
+			//this.showChildView("modal", view);
 		}
 	});
 	const App = Mn.Application.extend({
@@ -101,4 +83,5 @@ var view = new dialogView();
 	});
 	const myApp = new App();
 	myApp.start();
+
 });
